@@ -24,7 +24,16 @@ class Solver:
         return output
 
     def part_two(self):
-        return
+        times = re.findall(r"\d+", self.lines[0])
+        distances = re.findall(r"\d+", self.lines[1])
+        time = int("".join(times))
+        distance = int("".join(distances))
+        print(time)
+        print(distance)
+        for t in range(1, time):
+            d = t * (time - t)
+            if d > distance:
+                return time - 2 * t + 1
 
 
 if __name__ == "__main__":
