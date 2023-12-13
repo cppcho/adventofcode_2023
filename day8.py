@@ -1,8 +1,5 @@
 import re
-import functools
-import heapq
-import collections
-import enum
+import math
 
 
 class Solver:
@@ -40,7 +37,35 @@ class Solver:
         return count
 
     def part_two(self):
-        return 0
+        instructions = self.lines[0]
+        nodes = {}
+
+        for line in self.lines[2:]:
+            matches = re.search(r"(\w+) = \((\w+), (\w+)\)", line)
+            assert matches is not None
+            key, left, right = matches.groups()
+            nodes[key] = (left, right)
+
+        starts = [key for key in nodes if key.endswith("A")]
+        counts = []
+        print(starts)
+
+        for start in starts:
+            current = start
+            count = 0
+            next_instruction = 0
+            while not current.endswith("Z"):
+                if instructions[next_instruction] == "L":
+                    current = nodes[current][0]
+                else:
+                    current = nodes[current][1]
+                next_instruction = next_instruction + 1
+                if next_instruction == len(instructions):
+                    next_instruction = 0
+                count = count + 1
+            counts.append(count)
+
+        return math.lcm(*counts)
 
 
 if __name__ == "__main__":
@@ -49,4 +74,4 @@ if __name__ == "__main__":
     print(f"Q1 (Example): {example_solver.part_one()}")
     # print(f"Q2 (Example): {example_solver.part_two()}")
     print(f"Q1: {solver.part_one()}")
-    # print(f"Q2: {solver.part_two()}")
+    print(f"Q2: {solver.part_two()}")
